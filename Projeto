@@ -1,0 +1,154 @@
+# ==========================================
+# SISTEMA DE GESTÃO DE NOTAS E FREQUÊNCIA
+# ==========================================
+ 
+TOTAL_AULAS = 40
+MEDIA_APROVACAO = 6.0
+MEDIA_RECUPERACAO = 5.0
+FREQUENCIA_MINIMA = 75
+ 
+ 
+# ------------------------------------------
+# Função para validar notas
+# ------------------------------------------
+def ler_nota(numero):
+    while True:
+        try:
+            nota = float(input(f"Digite a nota {numero}: "))
+ 
+            if 0 <= nota <= 10:
+                return nota
+ 
+            print("Erro: a nota deve estar entre 0 e 10.")
+ 
+        except ValueError:
+            print("Erro: digite um número válido.")
+ 
+ 
+# ------------------------------------------
+# Função para validar faltas
+# ------------------------------------------
+def ler_faltas():
+    while True:
+        try:
+            faltas = int(input("Digite a quantidade de faltas: "))
+ 
+            if 0 <= faltas <= TOTAL_AULAS:
+                return faltas
+ 
+            print(f"Erro: digite um valor entre 0 e {TOTAL_AULAS}.")
+ 
+        except ValueError:
+            print("Erro: digite um número inteiro válido.")
+ 
+ 
+# ------------------------------------------
+# Função para calcular média
+# ------------------------------------------
+def calcular_media(notas):
+    return sum(notas) / len(notas)
+ 
+ 
+# ------------------------------------------
+# Função para calcular frequência
+# ------------------------------------------
+def calcular_frequencia(faltas):
+    return ((TOTAL_AULAS - faltas) / TOTAL_AULAS) * 100
+ 
+ 
+# ------------------------------------------
+# Função para verificar situação
+# ------------------------------------------
+def verificar_situacao(media, frequencia):
+    if frequencia < FREQUENCIA_MINIMA:
+        return "Reprovado por falta"
+ 
+    if media >= MEDIA_APROVACAO:
+        return "Aprovado"
+ 
+    if media >= MEDIA_RECUPERACAO:
+        return "Recuperação"
+ 
+    return "Reprovado por nota"
+ 
+ 
+# ==========================================
+# DADOS DO ALUNO
+# ==========================================
+ 
+aluno = {
+    "nome": input("Digite o nome do aluno: "),
+    "nivel": input("Digite o nível escolar: "),
+    "disciplinas": []
+}
+ 
+ 
+# ==========================================
+# CADASTRO DAS DISCIPLINAS
+# ==========================================
+ 
+quantidade = int(input("Quantas disciplinas deseja cadastrar? "))
+ 
+for i in range(quantidade):
+ 
+    print("\n" + "=" * 40)
+ 
+    nome_disciplina = input("Digite o nome da disciplina: ")
+ 
+    notas = [
+        ler_nota(1),
+        ler_nota(2),
+        ler_nota(3)
+    ]
+ 
+    faltas = ler_faltas()
+ 
+    media = calcular_media(notas)
+    frequencia = calcular_frequencia(faltas)
+    situacao = verificar_situacao(media, frequencia)
+ 
+    disciplina = {
+        "nome": nome_disciplina,
+        "notas": notas,
+        "media": media,
+        "faltas": faltas,
+        "frequencia": frequencia,
+        "situacao": situacao
+    }
+ 
+    aluno["disciplinas"].append(disciplina)
+ 
+ 
+# ==========================================
+# RELATÓRIO FINAL
+# ==========================================
+ 
+print("\n")
+print("=" * 50)
+print("RELATÓRIO FINAL DO ALUNO")
+print("=" * 50)
+ 
+print(f"Aluno: {aluno['nome']}")
+print(f"Nível: {aluno['nivel']}")
+ 
+media_geral = 0
+ 
+for disciplina in aluno["disciplinas"]:
+ 
+    media_geral += disciplina["media"]
+ 
+    print("\n" + "-" * 40)
+ 
+    print(f"Disciplina : {disciplina['nome']}")
+    print(f"Notas      : {disciplina['notas']}")
+    print(f"Média      : {disciplina['media']:.2f}")
+    print(f"Faltas     : {disciplina['faltas']}")
+    print(f"Frequência : {disciplina['frequencia']:.1f}%")
+    print(f"Situação   : {disciplina['situacao']}")
+ 
+# Média geral do aluno
+media_geral /= len(aluno["disciplinas"])
+ 
+print("\n" + "=" * 50)
+print(f"MÉDIA GERAL: {media_geral:.2f}")
+print("=" * 50)         
